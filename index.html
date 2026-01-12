@@ -28,7 +28,7 @@
             width: 100%;
             max-width: 500px;
             background: white;
-            margin-top: 30px;
+            margin-top: 20px;
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -36,7 +36,7 @@
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .header h1 {
@@ -48,7 +48,16 @@
         .header p {
             color: #666;
             font-size: 14px;
-            margin: 0;
+            margin-bottom: 15px;
+        }
+
+        /* STYLE LOGO SEKOLAH */
+        .logo-sekolah {
+            width: 100px;
+            /* Ukuran lebar logo */
+            height: auto;
+            margin: 10px auto;
+            display: block;
         }
 
         .input-group {
@@ -70,12 +79,7 @@
             font-size: 16px;
             box-sizing: border-box;
             transition: all 0.3s;
-        }
-
-        input[type="text"]:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 8px rgba(26, 35, 126, 0.1);
+            text-align: center;
         }
 
         button {
@@ -100,7 +104,6 @@
             display: none;
         }
 
-        /* CARD STATUS */
         .status-card {
             padding: 20px;
             border-radius: 15px;
@@ -127,12 +130,11 @@
         }
 
         .status-value {
-            font-size: 28px;
+            font-size: 26px;
             font-weight: 800;
             margin: 0;
         }
 
-        /* DATA DETAIL */
         .detail-table {
             width: 100%;
             background: #f9f9f9;
@@ -199,19 +201,20 @@
 
     <div class="container">
         <div class="header">
+            <img src="https://dwisma.id/img/Logo%20Dwisma.png" alt="Logo Sekolah" class="logo-sekolah">
             <h1>🎓 Pengumuman Eligible</h1>
             <p>SNBP Tahun 2026</p>
         </div>
 
         <form id="checkerForm">
             <div class="input-group">
-                <label for="nisnInput">NISN Siswa</label>
-                <input type="text" id="nisnInput" placeholder="Masukkan 10 digit NISN" required autocomplete="off">
+                <label for="nisnInput">Masukkan NISN Siswa</label>
+                <input type="text" id="nisnInput" placeholder="10 Digit Nomor Induk" required maxlength="10">
             </div>
             <button type="submit" id="btnCheck">Periksa Status</button>
         </form>
 
-        <div id="loader">Mencari data di server...</div>
+        <div id="loader">Mencari data...</div>
 
         <div id="result-area">
             <div id="statusCard" class="status-card">
@@ -233,18 +236,14 @@
                     <span id="rankOutput" class="detail-value"></span>
                 </div>
             </div>
-            <p style="font-size: 11px; color: #999; text-align: center; margin-top: 15px;">
-                *Data diambil secara otomatis dari database sekolah.
-            </p>
         </div>
 
         <div id="errorArea" style="display:none;">
-            <div class="error-box">NISN tidak ditemukan. Mohon hubungi wali kelas.</div>
+            <div class="error-box">Data tidak ditemukan. Silakan periksa kembali NISN Anda.</div>
         </div>
     </div>
 
     <script>
-        // GANTI INI DENGAN URL WEB APP GOOGLE SCRIPT ANDA
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHKAE2-_J3yOc6J-7ixByWKqeW9edz-SzUScF3LmNCDpWGUA74S3oJ0na6hocipGW3/exec";
 
         const form = document.getElementById('checkerForm');
@@ -256,13 +255,12 @@
             e.preventDefault();
             const nisn = document.getElementById('nisnInput').value;
 
-            // Reset UI
             resultArea.style.display = 'none';
             errorArea.style.display = 'none';
             loader.style.display = 'block';
 
             fetch(`${SCRIPT_URL}?nis=${nisn}`)
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
                     loader.style.display = 'none';
                     if (data.status === "success") {
@@ -271,27 +269,24 @@
                         errorArea.style.display = 'block';
                     }
                 })
-                .catch(error => {
+                .catch(err => {
                     loader.style.display = 'none';
-                    alert("Terjadi kesalahan koneksi!");
-                    console.error(error);
+                    alert("Koneksi Error!");
                 });
         });
 
         function showData(data) {
-            const keterangan = data.nilai['Status Eligible']; // Mengambil dari kolom Keterangan
+            const keterangan = data.nilai['Status Eligible'];
             const statusCard = document.getElementById('statusCard');
-            const statusOutput = document.getElementById('statusOutput');
 
-            // LOGIKA WARNA
-            // Jika teks mengandung "Not Eligible" (huruf besar/kecil tidak masalah)
+            // Cek apakah ada kata "Not" atau "Tidak"
             if (keterangan.toLowerCase().includes("not") || keterangan.toLowerCase().includes("tidak")) {
                 statusCard.className = "status-card not-eligible-bg";
             } else {
                 statusCard.className = "status-card eligible-bg";
             }
 
-            statusOutput.innerText = keterangan;
+            document.getElementById('statusOutput').innerText = keterangan;
             document.getElementById('nameOutput').innerText = data.nama;
             document.getElementById('classOutput').innerText = data.nilai['Kelas'];
             document.getElementById('rankOutput').innerText = data.nilai['Peringkat'];
