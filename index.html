@@ -165,6 +165,7 @@
         <div id="loader">Tunggu Sebentar...</div>
 
         <div id="result-area">
+            <div id="updateTime" style="font-size:12px; opacity:0.7;"></div>
             <div id="statusCard" class="status-card">
                 <p style="margin:0; font-size: 12px; opacity:0.8;">HASIL SELEKSI</p>
                 <p id="statusOutput" style="margin:5px 0; font-size: 24px; font-weight: 800;"></p>
@@ -201,6 +202,25 @@
                 </tbody>
             </table>
             <div id="keteranganArea" class="keterangan" style="display:none;"></div>
+
+            <div id="snpmbInfo" style="
+    margin-top:15px;
+    padding:12px;
+    background:#e3f2fd;
+    border-left:5px solid #1565c0;
+    border-radius:10px;
+    font-size:14px;
+    line-height:1.6;
+">
+                <strong>📌 Tindak Lanjut Wajib</strong><br>
+                Baik siswa <strong>eligible maupun tidak eligible</strong>,
+                wajib melakukan <strong>pendaftaran akun SNPMB</strong>
+                melalui laman resmi:<br>
+                👉 <a href="https://portal.snpmb.id/" target="_blank" style="font-weight:600;">
+                    https://portal.snpmb.id/
+                </a>
+            </div>
+
         </div>
     </div>
 
@@ -263,6 +283,10 @@
 
 
                         resultArea.style.display = 'block';
+
+                        document.getElementById("updateTime").innerText =
+                            "Terakhir diperbarui: " + new Date().toLocaleString("id-ID");
+
                     } else {
                         alert("NISN tidak ditemukan!");
                     }
