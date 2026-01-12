@@ -259,6 +259,16 @@
         .timeline-content {
             display: none;
         }
+
+        .withdrawn-bg {
+            background-color: #f9a825;
+        }
+
+        .keterangan.withdrawn {
+            background: #fff8e1;
+            color: #5d4037;
+            border-left: 5px solid #f9a825;
+        }
     </style>
 </head>
 
@@ -524,6 +534,14 @@
         const OPEN_TIME = new Date("2026-01-13T09:00:00+08:00").getTime();
         // const OPEN_TIME = new Date().getTime(); // langsung buka
 
+        /* ===============================
+        LABEL STATUS
+        =============================== */
+        const labelMap = {
+            eligible: "ELIGIBLE",
+            not_eligible: "TIDAK ELIGIBLE",
+            withdrawn: "MENGUNDURKAN DIRI"
+        };
 
         /* ===============================
            COUNTDOWN & LOCK PENGUMUMAN
@@ -573,7 +591,8 @@
                     if (data.status === "success") {
 
                         /* === DATA SISWA === */
-                        document.getElementById('statusOutput').innerText = data.nilai.Keterangan;
+                        document.getElementById('statusOutput').innerText =
+                            labelMap[data.status_siswa] || "STATUS TIDAK DIKENAL";
                         document.getElementById('nameOutput').innerText = data.nama;
                         document.getElementById('classOutput').innerText = data.nilai.Kelas;
                         document.getElementById('rankOutput').innerText = data.nilai.Peringkat;
@@ -588,28 +607,37 @@
 
                         /* === STATUS & KETERANGAN === */
                         const card = document.getElementById('statusCard');
-                        const ket = data.nilai.Keterangan.toLowerCase();
                         const ketArea = document.getElementById('keteranganArea');
+                        const status = data.status_siswa;
 
-                        if (ket.includes("tidak") || ket.includes("not")) {
-                            card.className = "status-card not-eligible-bg";
-                            ketArea.className = "keterangan not-eligible";
-                            ketArea.innerHTML = `
-                            <strong>📌 Informasi:</strong><br>
-                            Anda <strong>belum termasuk ELIGIBLE SNBP tahap 1</strong>.<br>
-                            Silakan <strong>menunggu pengumuman tahap 2 pada Kamis, 15 Januari 2026</strong>
-                            dan tetap mengikuti informasi resmi dari sekolah.<br><br>
-                            <em>Tetap semangat dan persiapkan diri untuk jalur seleksi berikutnya.</em>
-                        `;
-                        } else {
+                        if (status === "eligible") {
                             card.className = "status-card eligible-bg";
                             ketArea.className = "keterangan eligible";
                             ketArea.innerHTML = `
-                            <strong>📌 Informasi Penting:</strong><br>
-                            Anda <strong>dinyatakan ELIGIBLE SNBP 2026</strong>.<br>
-                            Wajib melakukan <strong>konfirmasi ke Guru BK</strong>
-                            paling lambat <strong>Kamis, 15 Januari 2026</strong>.
-                        `;
+        <strong>📌 Informasi Penting:</strong><br>
+        Anda <strong>dinyatakan ELIGIBLE SNBP 2026</strong>.<br>
+        Wajib melakukan <strong>konfirmasi ke Guru BK</strong>
+        paling lambat <strong>Kamis, 15 Januari 2026</strong>.
+    `;
+                        }
+                        else if (status === "not_eligible") {
+                            card.className = "status-card not-eligible-bg";
+                            ketArea.className = "keterangan not-eligible";
+                            ketArea.innerHTML = `
+        <strong>📌 Informasi:</strong><br>
+        Anda <strong>belum termasuk ELIGIBLE SNBP tahap 1</strong>.<br>
+        Silakan menunggu pengumuman tahap berikutnya
+        dan tetap mengikuti informasi resmi sekolah.
+    `;
+                        }
+                        else if (status === "withdrawn") {
+                            card.className = "status-card withdrawn-bg";
+                            ketArea.className = "keterangan withdrawn";
+                            ketArea.innerHTML = `
+        <strong>📌 Informasi:</strong><br>
+        Anda <strong>telah mengundurkan diri</strong>
+        dari proses SNBP berdasarkan data sekolah.
+    `;
                         }
 
                         ketArea.style.display = "block";
