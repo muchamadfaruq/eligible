@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cek Status Eligible 2026</title>
+    <title>SNPMB 2026</title>
     <style>
         :root {
             --primary-color: #1a237e;
@@ -145,6 +145,120 @@
             color: #b71c1c;
             border-left: 5px solid #d32f2f;
         }
+
+        /* ===============================
+        ALUR PANAH DINAMIS
+        =============================== */
+        .alur-wrapper {
+            max-width: 420px;
+            margin: 25px auto 30px;
+        }
+
+        .alur-item {
+            position: relative;
+            padding-left: 55px;
+            margin-bottom: 20px;
+        }
+
+        .alur-item::before {
+            content: "";
+            position: absolute;
+            left: 20px;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: #1a237e;
+        }
+
+        .alur-item:last-child::before {
+            display: none;
+        }
+
+        .alur-dot {
+            position: absolute;
+            left: 12px;
+            top: 18px;
+            width: 18px;
+            height: 18px;
+            background: #1a237e;
+            border-radius: 50%;
+        }
+
+        .alur-box {
+            background: #e3f2fd;
+            border: 2px solid #1a237e;
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 14px;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        /* status */
+        .alur-item.active .alur-box {
+            background: #e8f5e9;
+            border-color: #2e7d32;
+        }
+
+        .alur-item.active .alur-dot {
+            background: #2e7d32;
+        }
+
+        .alur-item.done {
+            opacity: 0.6;
+        }
+
+        .alur-badge {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .badge-active {
+            background: #2e7d32;
+            color: #fff;
+        }
+
+        .badge-done {
+            background: #e0e0e0;
+            color: #555;
+        }
+
+        /* ===============================
+        DROPDOWN TIMELINE
+        =============================== */
+        .timeline-toggle {
+            width: 90%;
+            padding: 12px 14px;
+            background: #f1f5ff;
+            border: 2px solid #1a237e;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .timeline-toggle span {
+            font-size: 14px;
+        }
+
+        .timeline-toggle .arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .timeline-toggle.open .arrow {
+            transform: rotate(180deg);
+        }
+
+        .timeline-content {
+            display: none;
+        }
     </style>
 </head>
 
@@ -153,11 +267,167 @@
     <div class="container">
         <div class="header">
             <img src="https://dwisma.id/img/Logo%20Dwisma.png" alt="Logo Sekolah" class="logo-sekolah">
-            <h3>SMAN 2 Mengwi</h3>
-            <h3>Pengumuman Eligible Tahap 1</h3>
-            <p>SNBP 2026</p>
+            <h3>SNPMB 2026</h3>
+            <p>Seleksi Nasional Penerimaan Mahasiswa Baru</p>
         </div>
 
+        <!-- Timeline SNBP -->
+        <div class="timeline-toggle" id="timelineToggle">
+            <span>📅 Lihat Timeline SNBP 2026</span>
+            <span class="arrow">▼</span>
+        </div>
+
+        <div class="timeline-content" id="timelineContent">
+            <div class="alur-wrapper">
+
+
+                <div class="alur-item" data-start="2025-12-29" data-end="2025-12-29">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>29 Des 2025</strong><br>
+                        Pengumuman Kuota Sekolah
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2025-12-29" data-end="2026-01-15">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>29 Des–15 Jan 2026</strong><br>
+                        Masa Sanggah
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-01-05" data-end="2026-01-26">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>5–26 Jan 2026</strong><br>
+                        Registrasi Akun Sekolah
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-01-05" data-end="2026-02-02">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>5 Jan–2 Feb 2026</strong><br>
+                        Pengisian PDSS
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-01-12" data-end="2026-02-18">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>12 Jan–18 Feb 2026</strong><br>
+                        Registrasi Akun Siswa
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-02-03" data-end="2026-02-18">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>3–18 Feb 2026</strong><br>
+                        Pendaftaran SNBP
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-03-31" data-end="2026-03-31">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>31 Mar 2026</strong><br>
+                        Pengumuman Hasil SNBP
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-02-03" data-end="2026-04-30">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>3 Feb–30 Apr 2026</strong><br>
+                        Unduh Kartu Peserta
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Timeline SNBT -->
+        <div class="timeline-toggle" id="timelineToggleSNBT">
+            <span>📅 Lihat Timeline SNBT 2026</span>
+            <span class="arrow">▼</span>
+        </div>
+
+        <div class="timeline-content" id="timelineContentSNBT">
+            <div class="alur-wrapper">
+
+                <div class="alur-item" data-start="2026-01-12" data-end="2026-04-07">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>12 Jan–7 Apr 2026</strong><br>
+                        Registrasi Akun SNPMB Siswa
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-03-25" data-end="2026-04-07">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>25 Mar–7 Apr 2026</strong><br>
+                        Pendaftaran UTBK-SNBT
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-03-25" data-end="2026-04-08">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>25 Mar–8 Apr 2026</strong><br>
+                        Pembayaran Biaya UTBK
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-04-21" data-end="2026-04-30">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>21–30 Apr 2026</strong><br>
+                        Pelaksanaan UTBK
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-05-25" data-end="2026-05-25">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>25 Mei 2026</strong><br>
+                        Pengumuman Hasil SNBT
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+                <div class="alur-item" data-start="2026-06-02" data-end="2026-07-31">
+                    <div class="alur-dot"></div>
+                    <div class="alur-box">
+                        <strong>2 Jun–31 Jul 2026</strong><br>
+                        Unduh Sertifikat UTBK
+                        <div class="alur-badge"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- End Timeline SNBT -->
+
+        <div class="header" style="margin-top:50px;">
+            <h3>Pengumuman Eligible Tahap 1</h3>
+        </div>
+
+        <!-- Countdown Box -->
         <div id="countdownBox" style="
     text-align:center;
     padding:20px;
@@ -359,6 +629,58 @@
                     alert("Terjadi kesalahan. Silakan coba lagi.");
                 });
         });
+
+        /* ===============================
+        LOGIKA ALUR DINAMIS
+        =============================== */
+        (function () {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            document.querySelectorAll(".alur-item").forEach(item => {
+                const start = new Date(item.dataset.start);
+                const end = new Date(item.dataset.end);
+                const badge = item.querySelector(".alur-badge");
+
+                start.setHours(0, 0, 0, 0);
+                end.setHours(23, 59, 59, 999);
+
+                if (today > end) {
+                    item.classList.add("done");
+                    badge.textContent = "SELESAI";
+                    badge.classList.add("badge-done");
+                }
+                else if (today >= start && today <= end) {
+                    item.classList.add("active");
+                    badge.textContent = "SEDANG BERLANGSUNG";
+                    badge.classList.add("badge-active");
+                }
+            });
+        })();
+
+        /* ===============================
+        TOGGLE DROPDOWN TIMELINE
+        =============================== */
+        const toggleBtn = document.getElementById("timelineToggle");
+        const timelineContent = document.getElementById("timelineContent");
+
+        const toggleBtnSNBT = document.getElementById("timelineToggleSNBT");
+        const timelineContentSNBT = document.getElementById("timelineContentSNBT");
+
+        toggleBtnSNBT.addEventListener("click", () => {
+            const isOpen = timelineContentSNBT.style.display === "block";
+            timelineContentSNBT.style.display = isOpen ? "none" : "block";
+            toggleBtnSNBT.classList.toggle("open", !isOpen);
+        });
+
+        toggleBtn.addEventListener("click", () => {
+            const isOpen = timelineContent.style.display === "block";
+
+            timelineContent.style.display = isOpen ? "none" : "block";
+            toggleBtn.classList.toggle("open", !isOpen);
+        });
+
+
     </script>
 
 </body>
