@@ -17,18 +17,15 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
             margin: 0;
+            padding: 20px;
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            padding: 20px;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 550px;
             background: white;
-            margin-top: 20px;
             padding: 30px;
             border-radius: 20px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -39,46 +36,20 @@
             margin-bottom: 25px;
         }
 
-        .header h1 {
-            color: var(--primary-color);
-            font-size: 22px;
-            margin-bottom: 5px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 15px;
-        }
-
-        /* STYLE LOGO SEKOLAH */
         .logo-sekolah {
-            width: 100px;
-            /* Ukuran lebar logo */
-            height: auto;
+            width: 80px;
             margin: 10px auto;
             display: block;
-        }
-
-        .input-group {
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
         }
 
         input[type="text"] {
             width: 100%;
             padding: 14px;
+            margin-bottom: 15px;
             border: 2px solid #e0e0e0;
             border-radius: 10px;
             font-size: 16px;
             box-sizing: border-box;
-            transition: all 0.3s;
             text-align: center;
         }
 
@@ -89,14 +60,8 @@
             color: white;
             border: none;
             border-radius: 10px;
-            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background-color: #0d1440;
         }
 
         #result-area {
@@ -110,7 +75,6 @@
             text-align: center;
             color: white;
             margin-bottom: 20px;
-            animation: fadeIn 0.5s ease;
         }
 
         .eligible-bg {
@@ -121,78 +85,45 @@
             background-color: var(--danger-color);
         }
 
-        .status-title {
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 5px;
-            opacity: 0.9;
-        }
-
-        .status-value {
-            font-size: 26px;
-            font-weight: 800;
-            margin: 0;
-        }
-
-        .detail-table {
+        /* Tabel Nilai */
+        table {
             width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
             background: #f9f9f9;
-            border-radius: 10px;
-            padding: 15px;
-            box-sizing: border-box;
+            border-radius: 8px;
+            overflow: hidden;
         }
 
-        .detail-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-
-        .detail-item:last-child {
-            border-bottom: none;
-        }
-
-        .detail-label {
-            color: #777;
+        th,
+        td {
+            padding: 12px;
+            border: 1px solid #eee;
+            text-align: center;
             font-size: 14px;
         }
 
-        .detail-value {
-            color: #333;
-            font-weight: 600;
-            text-align: right;
+        th {
+            background: #1a237e;
+            color: white;
         }
 
-        .error-box {
-            background-color: #ffebee;
-            color: #c62828;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: 600;
-            margin-top: 20px;
+        .total-row {
+            background: #e8eaf6;
+            font-weight: bold;
+        }
+
+        .info-siswa {
+            margin-bottom: 15px;
+            font-size: 14px;
+            line-height: 1.6;
         }
 
         #loader {
             display: none;
             text-align: center;
-            margin: 20px 0;
+            margin: 20px;
             color: var(--primary-color);
-            font-weight: 600;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
     </style>
 </head>
@@ -207,94 +138,93 @@
         </div>
 
         <form id="checkerForm">
-            <div class="input-group">
-                <label for="nisnInput">Masukkan NISN Siswa</label>
-                <input type="text" id="nisnInput" placeholder="10 Digit Nomor Induk" required maxlength="10">
-            </div>
-            <button type="submit" id="btnCheck">Periksa Status</button>
+            <input type="text" id="nisnInput" placeholder="Masukkan 10 Digit NISN" required>
+            <button type="submit">Lihat Hasil</button>
         </form>
 
-        <div id="loader">Mencari data...</div>
+        <div id="loader">Mengambil data nilai...</div>
 
         <div id="result-area">
             <div id="statusCard" class="status-card">
-                <p class="status-title">Hasil Keputusan</p>
-                <p id="statusOutput" class="status-value"></p>
+                <p style="margin:0; font-size: 12px; opacity:0.8;">HASIL SELEKSI</p>
+                <p id="statusOutput" style="margin:5px 0; font-size: 24px; font-weight: 800;"></p>
             </div>
 
-            <div class="detail-table">
-                <div class="detail-item">
-                    <span class="detail-label">Nama Lengkap</span>
-                    <span id="nameOutput" class="detail-value"></span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Kelas</span>
-                    <span id="classOutput" class="detail-value"></span>
-                </div>
-                <div class="detail-item">
-                    <span class="detail-label">Peringkat</span>
-                    <span id="rankOutput" class="detail-value"></span>
-                </div>
+            <div class="info-siswa">
+                <strong>Nama:</strong> <span id="nameOutput"></span><br>
+                <strong>Kelas:</strong> <span id="classOutput"></span><br>
+                <strong>Peringkat:</strong> <span id="rankOutput"></span>
             </div>
-        </div>
 
-        <div id="errorArea" style="display:none;">
-            <div class="error-box">Data tidak ditemukan. Silakan periksa kembali NISN Anda.</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>S1</th>
+                        <th>S2</th>
+                        <th>S3</th>
+                        <th>S4</th>
+                        <th>S5</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td id="s1"></td>
+                        <td id="s2"></td>
+                        <td id="s3"></td>
+                        <td id="s4"></td>
+                        <td id="s5"></td>
+                    </tr>
+                    <tr class="total-row">
+                        <td colspan="4">TOTAL NILAI</td>
+                        <td id="totalScore"></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHKAE2-_J3yOc6J-7ixByWKqeW9edz-SzUScF3LmNCDpWGUA74S3oJ0na6hocipGW3/exec";
 
-        const form = document.getElementById('checkerForm');
-        const resultArea = document.getElementById('result-area');
-        const errorArea = document.getElementById('errorArea');
-        const loader = document.getElementById('loader');
-
-        form.addEventListener('submit', e => {
+        document.getElementById('checkerForm').addEventListener('submit', e => {
             e.preventDefault();
             const nisn = document.getElementById('nisnInput').value;
+            const loader = document.getElementById('loader');
+            const resultArea = document.getElementById('result-area');
 
-            resultArea.style.display = 'none';
-            errorArea.style.display = 'none';
             loader.style.display = 'block';
+            resultArea.style.display = 'none';
 
             fetch(`${SCRIPT_URL}?nis=${nisn}`)
                 .then(res => res.json())
                 .then(data => {
                     loader.style.display = 'none';
                     if (data.status === "success") {
-                        showData(data);
+                        document.getElementById('statusOutput').innerText = data.nilai.Keterangan;
+                        document.getElementById('nameOutput').innerText = data.nama;
+                        document.getElementById('classOutput').innerText = data.nilai.Kelas;
+                        document.getElementById('rankOutput').innerText = data.nilai.Peringkat;
+
+                        // Isi Tabel Nilai
+                        document.getElementById('s1').innerText = data.nilai.S1;
+                        document.getElementById('s2').innerText = data.nilai.S2;
+                        document.getElementById('s3').innerText = data.nilai.S3;
+                        document.getElementById('s4').innerText = data.nilai.S4;
+                        document.getElementById('s5').innerText = data.nilai.S5;
+                        document.getElementById('totalScore').innerText = data.nilai.Total;
+
+                        // Warna Status
+                        const card = document.getElementById('statusCard');
+                        const ket = data.nilai.Keterangan.toLowerCase();
+                        card.className = (ket.includes("not") || ket.includes("tidak")) ? "status-card not-eligible-bg" : "status-card eligible-bg";
+
+                        resultArea.style.display = 'block';
                     } else {
-                        errorArea.style.display = 'block';
+                        alert("NISN tidak ditemukan!");
                     }
-                })
-                .catch(err => {
-                    loader.style.display = 'none';
-                    alert("Koneksi Error!");
                 });
         });
-
-        function showData(data) {
-            const keterangan = data.nilai['Status Eligible'];
-            const statusCard = document.getElementById('statusCard');
-
-            // Cek apakah ada kata "Not" atau "Tidak"
-            if (keterangan.toLowerCase().includes("not") || keterangan.toLowerCase().includes("tidak")) {
-                statusCard.className = "status-card not-eligible-bg";
-            } else {
-                statusCard.className = "status-card eligible-bg";
-            }
-
-            document.getElementById('statusOutput').innerText = keterangan;
-            document.getElementById('nameOutput').innerText = data.nama;
-            document.getElementById('classOutput').innerText = data.nilai['Kelas'];
-            document.getElementById('rankOutput').innerText = data.nilai['Peringkat'];
-
-            resultArea.style.display = 'block';
-        }
     </script>
-
 </body>
 
 </html>
