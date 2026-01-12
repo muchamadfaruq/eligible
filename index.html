@@ -157,7 +157,28 @@
             <p>SNBP 2026</p>
         </div>
 
-        <form id="checkerForm">
+        <div id="countdownBox" style="
+    text-align:center;
+    padding:20px;
+    background:#fff3e0;
+    border-radius:15px;
+    margin-bottom:20px;
+    border-left:5px solid #fb8c00;
+">
+            <h4 style="margin:0 0 10px;">⏳ Pengumuman Akan Dibuka Dalam</h4>
+            <div id="countdown" style="
+        font-size:20px;
+        font-weight:700;
+        color:#e65100;
+    "></div>
+            <p style="font-size:13px; margin-top:10px;">
+                Pengumuman dapat diakses pada<br>
+                <strong>13 Januari 2026 pukul 09.00 WIB</strong>
+            </p>
+        </div>
+
+
+        <form id="checkerForm" style="display:none;">
             <input type="text" id="nisnInput" placeholder="Masukkan NISN" required>
             <button type="submit">Lihat Hasil</button>
         </form>
@@ -225,10 +246,47 @@
     </div>
 
     <script>
+        /* ===============================
+           KONFIGURASI
+        =============================== */
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHKAE2-_J3yOc6J-7ixByWKqeW9edz-SzUScF3LmNCDpWGUA74S3oJ0na6hocipGW3/exec";
+        const OPEN_TIME = new Date("2026-01-13T09:00:00+07:00").getTime();
+        // const OPEN_TIME = new Date().getTime(); // langsung buka
 
+
+        /* ===============================
+           COUNTDOWN & LOCK PENGUMUMAN
+        =============================== */
+        const countdownEl = document.getElementById("countdown");
+        const countdownBox = document.getElementById("countdownBox");
+        const formEl = document.getElementById("checkerForm");
+
+        const timer = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = OPEN_TIME - now;
+
+            if (distance <= 0) {
+                clearInterval(timer);
+                countdownBox.style.display = "none";
+                formEl.style.display = "block";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            countdownEl.innerHTML =
+                `${days} hari ${hours} jam ${minutes} menit ${seconds} detik`;
+        }, 1000);
+
+        /* ===============================
+           CEK ELIGIBLE
+        =============================== */
         document.getElementById('checkerForm').addEventListener('submit', e => {
             e.preventDefault();
+
             const nisn = document.getElementById('nisnInput').value;
             const loader = document.getElementById('loader');
             const resultArea = document.getElementById('result-area');
@@ -240,13 +298,16 @@
                 .then(res => res.json())
                 .then(data => {
                     loader.style.display = 'none';
+
                     if (data.status === "success") {
+
+                        /* === DATA SISWA === */
                         document.getElementById('statusOutput').innerText = data.nilai.Keterangan;
                         document.getElementById('nameOutput').innerText = data.nama;
                         document.getElementById('classOutput').innerText = data.nilai.Kelas;
                         document.getElementById('rankOutput').innerText = data.nilai.Peringkat;
 
-                        // Isi Tabel Nilai
+                        /* === TABEL NILAI === */
                         document.getElementById('s1').innerText = data.nilai.S1;
                         document.getElementById('s2').innerText = data.nilai.S2;
                         document.getElementById('s3').innerText = data.nilai.S3;
@@ -254,45 +315,51 @@
                         document.getElementById('s5').innerText = data.nilai.S5;
                         document.getElementById('totalScore').innerText = data.nilai.Total;
 
-                        // Warna Status
+                        /* === STATUS & KETERANGAN === */
                         const card = document.getElementById('statusCard');
                         const ket = data.nilai.Keterangan.toLowerCase();
                         const ketArea = document.getElementById('keteranganArea');
 
-                        if (ket.includes("not") || ket.includes("tidak")) {
+                        if (ket.includes("tidak") || ket.includes("not")) {
                             card.className = "status-card not-eligible-bg";
                             ketArea.className = "keterangan not-eligible";
                             ketArea.innerHTML = `
-        <strong>📌 Informasi:</strong><br>
-        Anda <strong>belum termasuk ELIGIBLE SNBP tahap 1</strong>.
-        Silakan <strong>menunggu pengumuman tahap 2 pada hari Kamis, 15 Januari 2025</strong> dan tetap
-        mengikuti informasi resmi dari sekolah.
-    `;
+                            <strong>📌 Informasi:</strong><br>
+                            Anda <strong>belum termasuk ELIGIBLE SNBP tahap 1</strong>.<br>
+                            Silakan <strong>menunggu pengumuman tahap 2 pada Kamis, 15 Januari 2026</strong>
+                            dan tetap mengikuti informasi resmi dari sekolah.<br><br>
+                            <em>Tetap semangat dan persiapkan diri untuk jalur seleksi berikutnya.</em>
+                        `;
                         } else {
                             card.className = "status-card eligible-bg";
                             ketArea.className = "keterangan eligible";
                             ketArea.innerHTML = `
-        <strong>📌 Informasi Penting:</strong><br>
-        Anda <strong>dinyatakan ELIGIBLE SNBP 2026</strong>.
-        Wajib melakukan <strong>konfirmasi ke Guru BK</strong>
-        sebelum hari Kamis, 15 Januari 2025.
-    `;
+                            <strong>📌 Informasi Penting:</strong><br>
+                            Anda <strong>dinyatakan ELIGIBLE SNBP 2026</strong>.<br>
+                            Wajib melakukan <strong>konfirmasi ke Guru BK</strong>
+                            paling lambat <strong>Kamis, 15 Januari 2026</strong>.
+                        `;
                         }
 
                         ketArea.style.display = "block";
 
-
-                        resultArea.style.display = 'block';
-
+                        /* === TIMESTAMP === */
                         document.getElementById("updateTime").innerText =
                             "Terakhir diperbarui: " + new Date().toLocaleString("id-ID");
+
+                        resultArea.style.display = 'block';
 
                     } else {
                         alert("NISN tidak ditemukan!");
                     }
+                })
+                .catch(() => {
+                    loader.style.display = 'none';
+                    alert("Terjadi kesalahan. Silakan coba lagi.");
                 });
         });
     </script>
+
 </body>
 
 </html>
