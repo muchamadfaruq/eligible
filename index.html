@@ -125,6 +125,26 @@
             margin: 20px;
             color: var(--primary-color);
         }
+
+        .keterangan {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .keterangan.eligible {
+            background: #e8f5e9;
+            color: #1b5e20;
+            border-left: 5px solid #2e7d32;
+        }
+
+        .keterangan.not-eligible {
+            background: #ffebee;
+            color: #b71c1c;
+            border-left: 5px solid #d32f2f;
+        }
     </style>
 </head>
 
@@ -180,6 +200,7 @@
                     </tr>
                 </tbody>
             </table>
+            <div id="keteranganArea" class="keterangan" style="display:none;"></div>
         </div>
     </div>
 
@@ -216,7 +237,30 @@
                         // Warna Status
                         const card = document.getElementById('statusCard');
                         const ket = data.nilai.Keterangan.toLowerCase();
-                        card.className = (ket.includes("not") || ket.includes("tidak")) ? "status-card not-eligible-bg" : "status-card eligible-bg";
+                        const ketArea = document.getElementById('keteranganArea');
+
+                        if (ket.includes("not") || ket.includes("tidak")) {
+                            card.className = "status-card not-eligible-bg";
+                            ketArea.className = "keterangan not-eligible";
+                            ketArea.innerHTML = `
+        <strong>📌 Informasi:</strong><br>
+        Anda <strong>belum termasuk ELIGIBLE SNBP tahap 1</strong>.
+        Silakan <strong>menunggu pengumuman tahap 2 pada hari Kamis, 15 Januari 2025</strong> dan tetap
+        mengikuti informasi resmi dari sekolah.
+    `;
+                        } else {
+                            card.className = "status-card eligible-bg";
+                            ketArea.className = "keterangan eligible";
+                            ketArea.innerHTML = `
+        <strong>📌 Informasi Penting:</strong><br>
+        Anda <strong>dinyatakan ELIGIBLE SNBP 2026</strong>.
+        Wajib melakukan <strong>konfirmasi ke Guru BK</strong>
+        sebelum hari Kamis, 15 Januari 2025.
+    `;
+                        }
+
+                        ketArea.style.display = "block";
+
 
                         resultArea.style.display = 'block';
                     } else {
