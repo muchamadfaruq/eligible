@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Wali Kelas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #f4f7f9;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, .1);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #1a237e;
+        }
+
+        .info {
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th,
+        td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        th {
+            background: #1a237e;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .eligible {
+            color: #2e7d32;
+            font-weight: bold;
+        }
+
+        .not_eligible {
+            color: #d32f2f;
+            font-weight: bold;
+        }
+
+        .withdrawn {
+            color: #f9a825;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 15px;
+            font-size: 12px;
+            opacity: .6;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>📊 Dashboard Wali Kelas</h2>
+
+        <div class="info">
+            <strong>Kelas:</strong> <span id="kelasLabel"></span><br>
+            <strong>Total Siswa:</strong> <span id="totalSiswa">0</span>
+        </div>
+
+        <label>Filter Status:</label><br>
+        <select id="filterStatus">
+            <option value="all">Semua</option>
+            <option value="eligible">Eligible</option>
+            <option value="not_eligible">Tidak Eligible</option>
+            <option value="withdrawn">Mengundurkan Diri</option>
+        </select>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>NISN</th>
+                    <th>Peringkat</th>
+                    <th>Total Nilai</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+
+        <div class="footer">
+            Data bersumber dari sistem SNPMB Sekolah • <span id="updateTime"></span>
+        </div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyHKAE2-_J3yOc6J-7ixByWKqeW9edz-SzUScF3LmNCDpWGUA74S3oJ0na6hocipGW3/exec";
+
+        const params = new URLSearchParams(window.location.search);
+        const kelas = params.get("kelas");
+
+        document.getElementById("kelasLabel").innerText = kelas || "-";
+
+        let allData = [];
+
+        function loadData() {
+            fetch(`${SCRIPT_URL}?mode=kelas&kelas=${encodeURIComponent(kelas)}`)
+                .then(res => res.json())
+                .then(data => {
+                    allData = data.data || [];
+                    document.getElementById("totalSiswa").innerText = allData.length;
+                    renderTable(allData);
+                    document.getElementById("updateTime").innerText =
+                        new Date().toLocaleString("id-ID");
+                })
+                .catch(() => alert("Gagal memuat data"));
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById("tableBody");
+            tbody.innerHTML = "";
+
+            data.forEach((s, i) => {
+                const tr = document.createElement("tr");
+                tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${s.nama}</td>
+        <td>${s.nisn}</td>
+        <td>${s.peringkat}</td>
+        <td>${s.total}</td>
+        <td class="${s.status}">${label(s.status)}</td>
+      `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function label(status) {
+            return {
+                eligible: "ELIGIBLE",
+                not_eligible: "TIDAK ELIGIBLE",
+                withdrawn: "MENGUNDURKAN DIRI"
+            }[status] || "-";
+        }
+
+        document.getElementById("filterStatus").addEventListener("change", e => {
+            if (e.target.value === "all") {
+                renderTable(allData);
+            } else {
+                renderTable(allData.filter(d => d.status === e.target.value));
+            }
+        });
+
+        loadData();
+    </script>
+
+</body>
+
+</html>
